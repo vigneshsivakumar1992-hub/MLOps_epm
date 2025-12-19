@@ -5,16 +5,22 @@ on:
 
 jobs:
 
-  register-dataset:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install Dependencies
-        run: pip install -r epm/requirements.txt
-      - name: Upload Dataset to Hugging Face Hub
-        env:
-          HF_TOKEN_EPM: ${{ secrets.HF_TOKEN_EPM }}
-        run: python epm/model_building/data_register.py
+register-dataset:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install Dependencies
+      run: pip install -r epm/requirements.txt
+
+    - name: Upload Dataset to Hugging Face Hub
+      env:
+        HF_TOKEN_EPM: ${{ secrets.HF_TOKEN_EPM }}
+      run: python epm/model_building/data_register.py
 
   data-prep:
     needs: register-dataset
